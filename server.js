@@ -21,6 +21,18 @@ wss.on('connection', (ws) => {
                 client.send(message.toString()); // Ensure the message is sent as a string
             }
         }
+
+         // Automated responses
+         const lowerCaseMessage = message.toString().toLowerCase();
+         if (lowerCaseMessage.includes('hello')) {
+             ws.send('Hi there! How can I help you?');
+         } else if (lowerCaseMessage.includes('how are you')) {
+             ws.send('I am just a server, but I am doing great! How about you?');
+         } else if (lowerCaseMessage.includes('bye')) {
+             ws.send('Goodbye! Have a great day!');
+         } else {
+             ws.send('I am not sure how to respond to that. Try saying "hello"!');
+         }
     });
 
     // Handle client disconnection
