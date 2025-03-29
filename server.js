@@ -15,16 +15,21 @@ wss.on('connection', (ws) => {
     ws.on('message', (message) => {
         console.log(`Received: ${message}`); // Log the message in the terminal
 
-        // Broadcast the message to all connected clients
+        // Broadcast the message to all connected clients except the sender
         for (const client of clients) {
-            if (client.readyState === WebSocket.OPEN) {
+            if (client !== ws && client.readyState === WebSocket.OPEN) {
                 client.send(message.toString()); // Ensure the message is sent as a string
             }
         }
 
         // Automated responses
         const lowerCaseMessage = message.toString().toLowerCase();
-        if (lowerCaseMessage.includes('hello')) {
+
+        // List of greetings
+        const greetings = ['hello', 'hi', 'hey', 'good morning', 'good evening', 'good afternoon'];
+
+        // Check if the message contains any greetings
+        if (greetings.some((greeting) => lowerCaseMessage.includes(greeting))) {
             ws.send('Hi there! How can I help you?');
         } else if (lowerCaseMessage.includes('how are you')) {
             ws.send('I am just a server, but I am doing great! How about you?');
