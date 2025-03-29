@@ -12,27 +12,64 @@ body {
     background: linear-gradient(to bottom, #f0f4f8, #ffffff);
     color: #333;
     display: flex;
-    flex-direction: column;
     min-height: 100vh;
 }
 
-/* Header Styling */
-.header {
+/* Sidebar Styling */
+.sidebar {
     background-color: #3b5998;
     color: white;
-    text-align: center;
-    padding: 2rem 0;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
-.header h1 {
-    font-size: 2.8rem;
+.logo {
+    font-size: 1.8rem;
     font-weight: bold;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-align: center;
+}
+
+.nav-links {
+    list-style: none;
+    width: 100%;
+    padding: 0;
+}
+
+.nav-links li {
+    margin: 1rem 0;
+    text-align: center;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    display: block;
+    padding: 0.5rem 0;
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #4CAF50;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
 }
 
 /* Main Container Styling */
 .main-container {
-    flex: 1;
+    margin-left: 250px; /* Offset for the sidebar */
     padding: 2rem;
     display: flex;
     flex-direction: column;
