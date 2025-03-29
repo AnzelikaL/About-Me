@@ -24,7 +24,28 @@
             padding: 10px;
             background: #fff;
             margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
         }
+            .user-message {
+        align-self: flex-end; /* Align user messages to the right */
+        background-color: #007bff;
+        color: white;
+        padding: 10px;
+        border-radius: 10px;
+        margin: 5px 0;
+        max-width: 60%;
+    }
+
+    .bot-message {
+        align-self: flex-start; /* Align bot messages to the left */
+        background-color: #f1f1f1;
+        color: black;
+        padding: 10px;
+        border-radius: 10px;
+        margin: 5px 0;
+        max-width: 60%;
+    }
         #message-input {
             width: 80%;
             padding: 10px;
@@ -75,6 +96,7 @@
         socket.onmessage = (event) => {
             console.log('Message received:', event.data); // Debugging line
             const message = document.createElement('div');
+            message.classList.add('bot-message'); // Add bot-message class
             message.textContent = event.data;
             chatBox.appendChild(message);
             chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to the bottom
@@ -84,8 +106,15 @@
         sendButton.addEventListener('click', () => {
             const message = messageInput.value;
             if (message.trim() !== '') {
-                socket.send(message);
-                messageInput.value = '';
+                // Display the user's message
+            const userMessage = document.createElement('div');
+            userMessage.classList.add('user-message'); // Add user-message class
+            userMessage.textContent = message;
+            chatBox.appendChild(userMessage);
+
+            // Send the message to the server
+            socket.send(message);
+            messageInput.value = '';
             }
         });
 
