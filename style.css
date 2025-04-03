@@ -130,3 +130,107 @@ main section p {
     font-size: 0.9rem;
 }
 
+/* Enhanced Image Container Styling */
+.image-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.image-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.image-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+}
+
+.image-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+}
+
+.image-card:hover img {
+    transform: scale(1.1);
+}
+
+.image-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    text-align: center;
+    padding: 0.5rem;
+    font-size: 1rem;
+    font-style: italic;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.image-card:hover .image-caption {
+    opacity: 1;
+}
+
+/* Studies Page Styling */
+#studies {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.8;
+    color: #333;
+    padding: 2rem;
+    background: #f9f9fc;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+    margin: 2rem auto;
+}
+
+#studies h2 {
+    font-size: 2.5rem;
+    color: #3b5998;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+#studies p {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    text-align: justify;
+}
+
+#studies .highlight {
+    background-color: #d9f0ff;
+    padding: 0.2rem 0.4rem;
+    border-radius: 5px;
+    font-weight: bold;
+    color: #3b5998;
+}
+
+#studies .important {
+    color: #ff5722;
+    font-weight: bold;
+    font-style: italic;
+}
+
+#studies ul {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+    list-style-type: disc;
+}
+
+#studies ul li {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    color: #555;
+}
