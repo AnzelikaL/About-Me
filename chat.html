@@ -178,24 +178,38 @@
         sendButton.addEventListener('click', () => {
             const message = messageInput.value;
             if (message.trim() !== '') {
-            // Display the user's message
-            const userMessage = document.createElement('div');
-            userMessage.classList.add('user-message'); // Add user-message class
-            userMessage.textContent = message;
-            chatBox.appendChild(userMessage);
+                // Display the user's message
+                 const userMessage = document.createElement('div');
+                userMessage.classList.add('user-message'); // Add user-message class
+                userMessage.textContent = message;
+                chatBox.appendChild(userMessage);
 
-            // Send the message to the server
-            socket.send(message);
-            messageInput.value = '';
-          }
+                // Send the message to the server
+                socket.send(message);
+                messageInput.value = '';
+            }
         });
 
         // Send a message when the Enter key is pressed
-    messageInput.addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') {
-            sendMessage();
-        }
-    });
+        messageInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Prevent default behavior (e.g., form submission)
+        
+                // Reuse the logic from the "Send" button click event
+                const message = messageInput.value;
+                if (message.trim() !== '') {
+                    // Display the user's message
+                    const userMessage = document.createElement('div');
+                    userMessage.classList.add('user-message'); // Add user-message class
+                    userMessage.textContent = message;
+                    chatBox.appendChild(userMessage);
+
+                    // Send the message to the server
+                    socket.send(message);
+                    messageInput.value = '';
+                }
+            }
+        });
     </script>
 </body>
 </html>
