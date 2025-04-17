@@ -28,6 +28,14 @@ wss.on('connection', (ws) => {
         // Random response generator
         const getRandomResponse = (responses) => responses[Math.floor(Math.random() * responses.length)];
 
+        // Function to simulate typing before sending a response
+        const sendWithTyping = (ws, response, delay = 1000) => {
+            ws.send('Typing...');
+            setTimeout(() => {
+                ws.send(response);
+            }, delay);
+        };
+
         // Handle follow-up responses based on context
         if (context.topic === 'weather') {
             console.log('Handling weather context...');
@@ -62,7 +70,7 @@ wss.on('connection', (ws) => {
                 'Hey! I’d love to chat. Here are some topics we can discuss: "weather," "your day," "hobbies," "pets", "food", or "music."',
                 'Good to see you! We can talk about "weather," "your day," "hobbies," "pets", "food", or "music." What would you like to start with?'
             ];
-            ws.send(getRandomResponse(responses));
+            sendWithTyping(ws, getRandomResponse(responses));
         } else if (sunnyKeywords.some((keyword) => lowerCaseMessage.includes(keyword))) {
             console.log('Sunny weather detected!');
             const responses = [
@@ -70,7 +78,7 @@ wss.on('connection', (ws) => {
                 'Sunny days are the best! Is it one of those picture-perfect days, or are you just relieved it’s not raining?',
                 'Oh, I’m officially jealous—it’s all clouds here in my virtual world!'
             ];
-            ws.send(getRandomResponse(responses));
+            sendWithTyping(ws, getRandomResponse(responses));
         } else if (rainyKeywords.some((keyword) => lowerCaseMessage.includes(keyword))) {
             console.log('Rainy weather detected!');
             const responses = [
@@ -78,7 +86,7 @@ wss.on('connection', (ws) => {
                 'I hope you’ve got a good book or a warm drink to enjoy while it’s raining!',
                 'Rain can be refreshing, but I hope it clears up soon if you’re not a fan!'
             ];
-            ws.send(getRandomResponse(responses));
+            sendWithTyping(ws, getRandomResponse(responses));
         } else if (cloudyKeywords.some((keyword) => lowerCaseMessage.includes(keyword))) {
             console.log('Cloudy weather detected!');
             const responses = [
@@ -86,7 +94,7 @@ wss.on('connection', (ws) => {
                 'Gray skies can be a bit gloomy, but they make sunny days feel even more special!',
                 'Cloudy days are perfect for staying in and relaxing. What are you up to today?'
             ];
-            ws.send(getRandomResponse(responses));
+            sendWithTyping(ws, getRandomResponse(responses));
         } else if (weatherKeywords.some((keyword) => lowerCaseMessage.includes(keyword))) {
             console.log('General weather topic detected!');
             const responses = [
@@ -95,7 +103,7 @@ wss.on('connection', (ws) => {
                 'Is it warm or cold where you are? Let’s talk about it!',
                 'Weather can be so unpredictable! What’s it like in your area?'
             ];
-            ws.send(getRandomResponse(responses));
+            sendWithTyping(ws, getRandomResponse(responses));
         } else if (dayKeywords.some((keyword) => lowerCaseMessage.includes(keyword))) {
             console.log('Day topic detected!');
             const responses = [
@@ -103,7 +111,7 @@ wss.on('connection', (ws) => {
                 'I’ve had a busy day responding to messages! How about you?',
                 'My day is going well, thank you for asking! What about yours?'
             ];
-            ws.send(getRandomResponse(responses));
+            sendWithTyping(ws, getRandomResponse(responses));
         } else if (hobbiesKeywords.some((keyword) => lowerCaseMessage.includes(keyword))) {
             console.log('Hobbies topic detected!');
             const responses = [
@@ -111,7 +119,7 @@ wss.on('connection', (ws) => {
                 'Hobbies are so fun! Do you enjoy sports, reading, or something else?',
                 'Tell me about your hobbies! I’d love to hear about them.'
             ];
-            ws.send(getRandomResponse(responses));
+            sendWithTyping(ws, getRandomResponse(responses));
         } else if (petsKeywords.some((keyword) => lowerCaseMessage.includes(keyword))) {
             console.log('Pets topic detected!');
             const responses = [
@@ -119,7 +127,7 @@ wss.on('connection', (ws) => {
                 'I love animals! Do you have a dog, cat, or something else?',
                 'Pets bring so much joy! Tell me about your furry (or scaly) friends.'
             ];
-            ws.send(getRandomResponse(responses));
+            sendWithTyping(ws, getRandomResponse(responses));
         } else if (lowerCaseMessage.includes('bye')) {
             console.log('Goodbye detected!');
             const responses = [
@@ -127,7 +135,7 @@ wss.on('connection', (ws) => {
                 'See you later! Take care!',
                 'Bye! It was nice chatting with you!'
             ];
-            ws.send(getRandomResponse(responses));
+            sendWithTyping(ws, getRandomResponse(responses));
         } else if (foodKeywords.some((keyword) => lowerCaseMessage.includes(keyword))) {
             context.topic = 'food';
             const responses = [
@@ -135,7 +143,7 @@ wss.on('connection', (ws) => {
                 'I love talking about food — are you craving anything right now?',
                 'Are you into cooking or more of a takeout person? 😄'
             ];
-            ws.send(getRandomResponse(responses));
+            sendWithTyping(ws, getRandomResponse(responses));
         } else if (musicKeywords.some((keyword) => lowerCaseMessage.includes(keyword))) {
             context.topic = 'music';
             const responses = [
@@ -143,22 +151,22 @@ wss.on('connection', (ws) => {
                 'Got a favorite artist or band?',
                 'Do you like chill beats or something more energetic?'
             ];
-            ws.send(getRandomResponse(responses));
+            sendWithTyping(ws, getRandomResponse(responses));
         } else if (context.topic === 'food') {
             if (lowerCaseMessage.includes('pizza')) {
-                ws.send('Pizza is such a classic! Do you like thin crust or deep dish?');
+                sendWithTyping(ws, 'Pizza is such a classic! Do you like thin crust or deep dish?');
             } else if (lowerCaseMessage.includes('sushi')) {
-                ws.send('Yum, sushi! Do you prefer rolls or sashimi?');
+                sendWithTyping(ws, 'Yum, sushi! Do you prefer rolls or sashimi?');
             } else {
-                ws.send('Food talk always makes me hungry. Got any other favorites?');
+                sendWithTyping(ws, 'Food talk always makes me hungry. Got any other favorites?');
             }
         } else if (context.topic === 'music') {
             if (lowerCaseMessage.includes('rock')) {
-                ws.send('Rock on! Do you like classic rock or more modern styles?');
+                sendWithTyping(ws, 'Rock on! Do you like classic rock or more modern styles?');
             } else if (lowerCaseMessage.includes('pop')) {
-                ws.send('Pop music is so catchy! Any favorite songs right now?');
+                sendWithTyping(ws, 'Pop music is so catchy! Any favorite songs right now?');
             } else {
-                ws.send('Music is such a personal thing. Want to tell me more about your taste?');
+                sendWithTyping(ws, 'Music is such a personal thing. Want to tell me more about your taste?');
             }
         } else {
             console.log('Fallback response triggered!');
@@ -168,7 +176,7 @@ wss.on('connection', (ws) => {
                 'You’ve got me curious! Can you say that a different way?',
                 'I’m always up for a chat — try asking about weather, food, music, or even how my day’s been.'
             ];
-            ws.send(getRandomResponse(responses));
+            sendWithTyping(ws, getRandomResponse(responses));
         }
     });
 
