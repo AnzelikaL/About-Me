@@ -149,6 +149,41 @@
         // Connect to the WebSocket server
         const socket = new WebSocket('ws://localhost:8080');
 
+        // Create an element to display the number of users online
+        const usersOnlineDisplay = document.createElement('div');
+        usersOnlineDisplay.id = 'users-online';
+        usersOnlineDisplay.style.marginBottom = '10px';
+        usersOnlineDisplay.style.fontWeight = 'bold';
+        usersOnlineDisplay.textContent = 'Users online: 0';
+        chatBox.parentElement.insertBefore(usersOnlineDisplay, chatBox);
+
+        // Update the "Users Online" display when the server sends the user count
+        socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+
+            if (data.type === 'userCount') {
+                // Update the users online display
+                usersOnlineDisplay.textContent = `Users online: ${data.count}`;
+            } else if (data.type === 'update') {
+                // Update the bot's message dynamically
+                let botMessage = document.querySelector('.bot-message-typing');
+                if (!botMessage) {
+                    botMessage = document.createElement('div');
+                    botMessage.classList.add('bot-message', 'bot-message-typing');
+                    chatBox.appendChild(botMessage);
+                }
+                botMessage.textContent = data.text;
+                chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to the bottom
+            } else if (data.type === 'done') {
+                // Finalize the bot's message
+                const botMessage = document.querySelector('.bot-message-typing');
+                if (botMessage) {
+                    botMessage.classList.remove('bot-message-typing');
+                }
+                console.log('Response complete:', data.text);
+            }
+        };
+
         // Log when the connection is successfully opened
         socket.onopen = () => {
             console.log('WebSocket connection established');

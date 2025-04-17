@@ -6,6 +6,17 @@ const wss = new WebSocket.Server({ port: 8080 });
 // Store connected clients and their context
 const clients = new Map(); // Use a Map to store context for each client
 
+// Broadcast the number of users online to all clients
+const broadcastUserCount = () => {
+    const userCount = clients.size; // Get the number of connected clients
+    const message = JSON.stringify({ type: 'userCount', count: userCount });
+    clients.forEach((_, client) => {
+        if (client.readyState === WebSocket.OPEN) {
+            client.send(message);
+        }
+    });
+};
+
 // Handle new connections
 wss.on('connection', (ws) => {
     // Initialize context for the new client
