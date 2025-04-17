@@ -164,8 +164,38 @@
             console.log('WebSocket connection closed');
         };
 
-                // Display incoming messages with typewriter effect
-                socket.onmessage = (event) => {
+        // Typing indicator variables
+        let typingIndicator;
+        let typingDotsInterval;
+        let typingTimeout;
+
+        // Function to show "Typing..." with moving dots
+        const showTypingIndicator = () => {
+            if (!typingIndicator) {
+                typingIndicator = document.createElement('div');
+                typingIndicator.classList.add('bot-message');
+                typingIndicator.id = 'typing-indicator';
+                chatBox.appendChild(typingIndicator);
+            }
+
+            let dots = 0;
+            typingDotsInterval = setInterval(() => {
+                dots = (dots + 1) % 4; // Cycle through 0, 1, 2, 3 dots
+                typingIndicator.textContent = 'Typing' + '.'.repeat(dots);
+            }, 500); // Update every 500ms
+        };
+
+        // Function to hide "Typing..."
+        const hideTypingIndicator = () => {
+            if (typingIndicator) {
+                clearInterval(typingDotsInterval); // Stop the dots animation
+                typingIndicator.remove();
+                typingIndicator = null;
+            }
+        };
+
+        // Display incoming messages with typewriter effect
+        socket.onmessage = (event) => {
             const data = JSON.parse(event.data);
 
             if (data.type === 'update') {
@@ -188,6 +218,22 @@
             }
         };
 
+        // Show "Typing..." when the user types
+        messageInput.addEventListener('input', () => {
+            // Clear any existing timeout to hide the typing indicator
+            clearTimeout(typingTimeout);
+
+            // Show the typing indicator if it's not already visible
+            if (!typingIndicator) {
+                showTypingIndicator();
+            }
+
+            // Set a timeout to hide the typing indicator after 2 seconds of inactivity
+            typingTimeout = setTimeout(() => {
+                hideTypingIndicator();
+            }, 2000);
+        });
+
         // Send a message when the button is clicked
         sendButton.addEventListener('click', () => {
             const message = messageInput.value;
@@ -201,6 +247,9 @@
                 // Send the message to the server
                 socket.send(message);
                 messageInput.value = '';
+            
+                // Hide the typing indicator
+                hideTypingIndicator();
             }
         });
 
