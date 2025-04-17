@@ -50,15 +50,17 @@ wss.on('connection', (ws) => {
         const dayKeywords = ['your day', 'how is your day', 'what about your day'];
         const hobbiesKeywords = ['hobbies', 'interests', 'what do you like'];
         const petsKeywords = ['pets', 'animals', 'do you have pets'];
+        const foodKeywords = ['food', 'eat', 'hungry', 'favorite food', 'cuisine'];
+        const musicKeywords = ['music', 'song', 'band', 'listen to', 'favorite music'];
 
         // Check if the message contains any greetings
         if (greetings.some((greeting) => lowerCaseMessage.includes(greeting))) {
             console.log('Greeting detected!');
             const responses = [
-                'Hi there! I can chat about a variety of topics. Try asking about "weather," "your day," "hobbies," or "pets."',
-                'Hello! Let’s talk about something fun. You can ask me about "weather," "your day," "hobbies," or "pets."',
-                'Hey! I’d love to chat. Here are some topics we can discuss: "weather," "your day," "hobbies," or "pets."',
-                'Good to see you! We can talk about "weather," "your day," "hobbies," or "pets." What would you like to start with?'
+                'Hi there! I can chat about a variety of topics. Try asking about "weather," "your day," "hobbies," "pets", "food", or "music."',
+                'Hello! Let’s talk about something fun. You can ask me about "weather," "your day," "hobbies," "pets", "food", or "music."',
+                'Hey! I’d love to chat. Here are some topics we can discuss: "weather," "your day," "hobbies," "pets", "food", or "music."',
+                'Good to see you! We can talk about "weather," "your day," "hobbies," "pets", "food", or "music." What would you like to start with?'
             ];
             ws.send(getRandomResponse(responses));
         } else if (sunnyKeywords.some((keyword) => lowerCaseMessage.includes(keyword))) {
@@ -126,12 +128,45 @@ wss.on('connection', (ws) => {
                 'Bye! It was nice chatting with you!'
             ];
             ws.send(getRandomResponse(responses));
+        } else if (foodKeywords.some((keyword) => lowerCaseMessage.includes(keyword))) {
+            context.topic = 'food';
+            const responses = [
+                'Ooh, food is always a fun topic! What’s your favorite dish?',
+                'I love talking about food — are you craving anything right now?',
+                'Are you into cooking or more of a takeout person? 😄'
+            ];
+            ws.send(getRandomResponse(responses));
+        } else if (musicKeywords.some((keyword) => lowerCaseMessage.includes(keyword))) {
+            context.topic = 'music';
+            const responses = [
+                'Music is such a vibe! What kind of music do you enjoy?',
+                'Got a favorite artist or band?',
+                'Do you like chill beats or something more energetic?'
+            ];
+            ws.send(getRandomResponse(responses));
+        } else if (context.topic === 'food') {
+            if (lowerCaseMessage.includes('pizza')) {
+                ws.send('Pizza is such a classic! Do you like thin crust or deep dish?');
+            } else if (lowerCaseMessage.includes('sushi')) {
+                ws.send('Yum, sushi! Do you prefer rolls or sashimi?');
+            } else {
+                ws.send('Food talk always makes me hungry. Got any other favorites?');
+            }
+        } else if (context.topic === 'music') {
+            if (lowerCaseMessage.includes('rock')) {
+                ws.send('Rock on! Do you like classic rock or more modern styles?');
+            } else if (lowerCaseMessage.includes('pop')) {
+                ws.send('Pop music is so catchy! Any favorite songs right now?');
+            } else {
+                ws.send('Music is such a personal thing. Want to tell me more about your taste?');
+            }
         } else {
             console.log('Fallback response triggered!');
             const responses = [
-                'I am not sure how to respond to that. Try saying "hello"!',
-                'Hmm, I didn’t quite get that. Let’s talk about weather, your day, hobbies, or pets!',
-                'I’m here to chat! What would you like to talk about?'
+                'That’s interesting! Tell me more.',
+                'Hmm, not sure I caught that. Want to talk about food, music, hobbies, or pets?',
+                'You’ve got me curious! Can you say that a different way?',
+                'I’m always up for a chat — try asking about weather, food, music, or even how my day’s been.'
             ];
             ws.send(getRandomResponse(responses));
         }
